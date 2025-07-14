@@ -1,13 +1,48 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { LoadingScreen } from '@/components/LoadingScreen';
+import { Navbar } from '@/components/Navbar';
+import { HeroSection } from '@/components/HeroSection';
+import { AboutSection } from '@/components/AboutSection';
+import { SkillsSection } from '@/components/SkillsSection';
+import { ProjectsSection } from '@/components/ProjectsSection';
+import { TechStackSection } from '@/components/TechStackSection';
+import { ContactSection } from '@/components/ContactSection';
+import { Footer } from '@/components/Footer';
 
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Show loading screen only on first visit
+    const hasVisited = sessionStorage.getItem('hasVisited');
+    if (hasVisited) {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    sessionStorage.setItem('hasVisited', 'true');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <>
+      <AnimatePresence>
+        {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
+      </AnimatePresence>
+      
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <HeroSection />
+        <AboutSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <TechStackSection />
+        <ContactSection />
+        <Footer />
       </div>
-    </div>
+    </>
   );
 };
 
